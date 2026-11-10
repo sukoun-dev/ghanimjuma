@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ghanim Juma</title>
     <meta name="color-scheme" content="light dark">
+    <!-- Poster is the video's first frame: paints instantly while the video buffers. -->
+    <link rel="preload" as="image" href="assets/videos/bg-skyline-poster.jpg" fetchpriority="high">
     <style>
         :root {
             --bg: #ffffff;
+            --video-fallback: #b8784a;
         }
         @media (prefers-color-scheme: dark) {
             :root {
@@ -18,10 +21,73 @@
             margin: 0;
             padding: 0;
             height: 100%;
+        }
+        /* On html only: a body background would paint over the z-index:-1 video layer. */
+        html {
             background: var(--bg);
+        }
+        .bg-video {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            /* 28% keeps the Burj Khalifa in frame on narrow/portrait screens. */
+            --focus: 28% center;
+            background: var(--video-fallback) url("assets/videos/bg-skyline-poster.jpg") var(--focus) / cover no-repeat;
+        }
+        .bg-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: var(--focus);
+            display: block;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
+    <div class="bg-video" aria-hidden="true">
+        <video
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            disablepictureinpicture
+            disableremoteplayback
+            poster="assets/videos/bg-skyline-poster.jpg"
+        >
+            <source src="assets/videos/bg-skyline-720.mp4" type="video/mp4" media="(max-width: 1024px)">
+            <source src="assets/videos/bg-skyline-1080.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        (function () {
+            var video = document.querySelector('.bg-video video');
+            if (!video) return;
+
+            // Respect users who ask for less motion: keep the still poster.
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            function applyMotionPreference() {
+                if (reduceMotion.matches) {
+                    video.pause();
+                } else {
+                    var p = video.play();
+                    if (p && p.catch) p.catch(function () {});
+                }
+            }
+            applyMotionPreference();
+            if (reduceMotion.addEventListener) {
+                reduceMotion.addEventListener('change', applyMotionPreference);
+            }
+
+            // Don't decode frames while the tab is hidden.
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) video.pause();
+                else applyMotionPreference();
+            });
+        })();
+    </script>
 </body>
 </html>
