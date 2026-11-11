@@ -11,7 +11,11 @@
     <style>
         :root {
             --bg: #ffffff;
-            --video-fallback: #150f10;
+            --brand-brown: #4b2f2a;
+            --brand-cream: #f4f1e8;
+            --video-fallback: var(--brand-brown);
+            /* Light tint over the video so the cream text stays readable on bright scenes. Set to 0 to remove. */
+            --scrim-opacity: 0.45;
         }
         @media (prefers-color-scheme: dark) {
             :root {
@@ -51,6 +55,66 @@
             display: block;
             pointer-events: none;
         }
+        .bg-video::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #1e120f;
+            opacity: var(--scrim-opacity);
+        }
+
+        /* ---- Overlay: three equal columns split by two thin lines, content in the middle one ---- */
+        .stage {
+            position: fixed;
+            inset: 0;
+            height: 100vh;
+            height: 100dvh;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .stage__col {
+            grid-column: 2;
+            position: relative;
+            border-inline: 1px solid color-mix(in srgb, var(--brand-cream) 75%, transparent);
+        }
+        .stage__logo,
+        .stage__tagline {
+            position: absolute;
+            inset-inline-start: 17%;
+            margin: 0;
+        }
+        .stage__logo {
+            top: 27.5%;
+            width: 40%;
+        }
+        .stage__tagline {
+            top: 69.5%;
+            width: 55%;
+        }
+        .stage img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Phones / narrow portrait: thirds would be too tight, so widen the middle column. */
+        @media (max-width: 900px) and (orientation: portrait) {
+            .stage {
+                grid-template-columns: 1fr 8fr 1fr;
+            }
+            .stage__logo,
+            .stage__tagline {
+                inset-inline-start: 12%;
+            }
+            .stage__logo {
+                top: 26%;
+                width: 52%;
+            }
+            .stage__tagline {
+                top: 70%;
+                width: 74%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -78,6 +142,17 @@
             <source src="assets/videos/bg-story-1080.mp4" type="video/mp4">
         </video>
     </div>
+
+    <main class="stage">
+        <div class="stage__col">
+            <h1 class="stage__logo">
+                <img src="assets/images/GJ-Soon-02.svg" width="255" height="207" alt="Ghanim Juma — غانم جمعة" fetchpriority="high">
+            </h1>
+            <p class="stage__tagline">
+                <img src="assets/images/GJ-Soon-03.svg" width="356" height="86" alt="New doors, new horizons — أبواب جديدة، آفاق جديدة">
+            </p>
+        </div>
+    </main>
 
     <script>
         (function () {
