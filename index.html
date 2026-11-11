@@ -6,8 +6,8 @@
     <title>Ghanim Juma</title>
     <meta name="color-scheme" content="light dark">
     <!-- Posters are the video's first frame: they paint instantly while the video buffers. -->
-    <link rel="preload" as="image" href="assets/videos/bg-story-poster-portrait.jpg" media="(orientation: portrait)" fetchpriority="high">
-    <link rel="preload" as="image" href="assets/videos/bg-story-poster.jpg" media="(orientation: landscape)" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/videos/gj-hero-mobile-poster.jpg" media="(orientation: portrait)" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/videos/gj-hero-web-poster.jpg" media="(orientation: landscape)" fetchpriority="high">
     <style>
         :root {
             --bg: #ffffff;
@@ -40,11 +40,11 @@
             width: 100vw;
             z-index: -1;
             overflow: hidden;
-            background: var(--video-fallback) url("assets/videos/bg-story-poster.jpg") center / cover no-repeat;
+            background: var(--video-fallback) url("assets/videos/gj-hero-web-poster.jpg") center / cover no-repeat;
         }
         @media (orientation: portrait) {
             .bg-video {
-                background-image: url("assets/videos/bg-story-poster-portrait.jpg");
+                background-image: url("assets/videos/gj-hero-mobile-poster.jpg");
             }
         }
         .bg-video video {
@@ -125,9 +125,10 @@
     <div class="bg-video" aria-hidden="true">
         <!--
             The browser plays the first source it supports whose media query matches:
-            - Portrait screens (phones) get a 9:16 crop, so they never download pixels they can't show.
-            - Desktop: AV1 (Chrome/Edge/Firefox) then HEVC (Safari) — both well under H.264's size at equal or better quality.
-            - H.264 is the universal fallback.
+            - Portrait screens (phones) get the dedicated 9:16 mobile cut at 720x1280.
+              HEVC first (hardware-decoded on iPhone/Android = smooth, battery-friendly), then AV1.
+            - Landscape: AV1 (Chrome/Edge/Firefox) then HEVC (Safari).
+            - H.264 is the universal fallback for both.
         -->
         <video
             autoplay
@@ -138,12 +139,12 @@
             disablepictureinpicture
             disableremoteplayback
         >
-            <source src="assets/videos/bg-story-portrait.hevc.mp4" type='video/mp4; codecs="hvc1"' media="(orientation: portrait)">
-            <source src="assets/videos/bg-story-portrait.mp4" type="video/mp4" media="(orientation: portrait)">
-            <source src="assets/videos/bg-story-720.mp4" type="video/mp4" media="(max-width: 1280px)">
-            <source src="assets/videos/bg-story-1080.av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'>
-            <source src="assets/videos/bg-story-1080.hevc.mp4" type='video/mp4; codecs="hvc1"'>
-            <source src="assets/videos/bg-story-1080.mp4" type="video/mp4">
+            <source src="assets/videos/gj-hero-mobile-hevc.mp4" type='video/mp4; codecs="hvc1"' media="(orientation: portrait)">
+            <source src="assets/videos/gj-hero-mobile-av1.mp4" type='video/mp4; codecs="av01.0.05M.10"' media="(orientation: portrait)">
+            <source src="assets/videos/gj-hero-mobile-h264.mp4" type="video/mp4" media="(orientation: portrait)">
+            <source src="assets/videos/gj-hero-web-av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'>
+            <source src="assets/videos/gj-hero-web-hevc.mp4" type='video/mp4; codecs="hvc1"'>
+            <source src="assets/videos/gj-hero-web-h264.mp4" type="video/mp4">
         </video>
     </div>
 
