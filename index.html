@@ -58,7 +58,8 @@
         <!--
             The browser plays the first source it supports whose media query matches:
             - Portrait screens (phones) get a 9:16 crop, so they never download pixels they can't show.
-            - HEVC (hvc1) is ~40% smaller than H.264 at the same quality; H.264 is the universal fallback.
+            - Desktop: AV1 (Chrome/Edge/Firefox) then HEVC (Safari) — both well under H.264's size at equal or better quality.
+            - H.264 is the universal fallback.
         -->
         <video
             autoplay
@@ -72,6 +73,7 @@
             <source src="assets/videos/bg-story-portrait.hevc.mp4" type='video/mp4; codecs="hvc1"' media="(orientation: portrait)">
             <source src="assets/videos/bg-story-portrait.mp4" type="video/mp4" media="(orientation: portrait)">
             <source src="assets/videos/bg-story-720.mp4" type="video/mp4" media="(max-width: 1280px)">
+            <source src="assets/videos/bg-story-1080.av1.mp4" type='video/mp4; codecs="av01.0.08M.10"'>
             <source src="assets/videos/bg-story-1080.hevc.mp4" type='video/mp4; codecs="hvc1"'>
             <source src="assets/videos/bg-story-1080.mp4" type="video/mp4">
         </video>
