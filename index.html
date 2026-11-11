@@ -83,13 +83,15 @@
             inset-inline-start: 17%;
             margin: 0;
         }
+        /* Widths are capped by viewport height too, so on short screens the logo
+           and tagline shrink instead of running into each other. */
         .stage__logo {
             top: 27.5%;
-            width: 40%;
+            width: min(40%, 30vh);
         }
         .stage__tagline {
             top: 69.5%;
-            width: 55%;
+            width: min(55%, 40vh);
         }
         .stage img {
             display: block;
@@ -97,22 +99,24 @@
             height: auto;
         }
 
-        /* Phones / narrow portrait: thirds would be too tight, so widen the middle column. */
-        @media (max-width: 900px) and (orientation: portrait) {
+        /* Portrait screens (phones, tablets, narrow windows): thirds would be too tight,
+           so the middle column takes most of the width and the content keeps the
+           desktop proportions, with room on the right so the tagline never touches the line. */
+        @media (orientation: portrait) {
             .stage {
-                grid-template-columns: 1fr 8fr 1fr;
+                grid-template-columns: 1fr 10fr 1fr;
             }
             .stage__logo,
             .stage__tagline {
-                inset-inline-start: 12%;
+                inset-inline-start: 13%;
             }
             .stage__logo {
-                top: 26%;
-                width: 52%;
+                top: 28%;
+                width: min(44%, 300px);
             }
             .stage__tagline {
-                top: 70%;
-                width: 74%;
+                top: 68%;
+                width: min(62%, 420px);
             }
         }
     </style>
